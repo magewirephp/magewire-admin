@@ -1,5 +1,5 @@
 {
-    "name": "magewirephp/magewire-three",
+    "name": "magewirephp/magewire-admin",
     "description": "A compatibility module enabling Magewire integration within the backend of Magento 2",
     "type": "magento2-module",
     "license": "MIT",
