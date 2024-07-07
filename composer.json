@@ -1,0 +1,20 @@
+{
+    "name": "magewirephp/magewire-three",
+    "description": "A compatibility module enabling Magewire integration within the backend of Magento 2",
+    "type": "magento2-module",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Willem Poortman",
+            "role": "Founder / Developer"
+        }
+    ],
+    "autoload": {
+        "files": [
+            "src/registration.php"
+        ],
+        "psr-4": {
+            "Magewirephp\\MagewireAdmin\\": "src/"
+        }
+    }
+}
