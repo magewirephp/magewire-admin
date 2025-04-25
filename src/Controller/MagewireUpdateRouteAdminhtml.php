@@ -10,30 +10,39 @@ declare(strict_types=1);
 
 namespace Magewirephp\MagewireAdmin\Controller;
 
-use Magento\Backend\App\Area\FrontNameResolver;
-use Magento\Backend\Model\Auth\Session as SessionAuth;
 use Magento\Backend\Model\Session\AdminConfig;
+use Magento\Backend\Model\Auth\Session as SessionAuth;
+use Magento\Framework\App\ActionFactory;
 use Magento\Framework\HTTP\PhpEnvironment\Request;
-use Magewirephp\Magewire\Controller\MagewireUpdateRoute;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Webapi\ServiceInputProcessor;
+use Magewirephp\Magewire\Controller\MagewireUpdateRouteFrontend;
+use Magewirephp\Magewire\MagewireServiceProvider;
+use Psr\Log\LoggerInterface;
 
-class MagewireUpdateRouteAdminhtml extends MagewireUpdateRoute
+class MagewireUpdateRouteAdminhtml extends MagewireUpdateRouteFrontend
 {
     public function __construct(
-        private readonly FrontNameResolver $frontNameResolver,
+        SerializerInterface $serializer,
+        ServiceInputProcessor $serviceInputProcessor,
+        MagewireServiceProvider $magewireServiceProvider,
+        ActionFactory $actionFactory,
+        LoggerInterface $logger,
         private readonly SessionAuth $sessionAuth
     ) {
-
+        parent::__construct(
+            $serializer,
+            $serviceInputProcessor,
+            $magewireServiceProvider,
+            $actionFactory,
+            $logger
+        );
     }
 
     public function getMatchConditions(): array
     {
-        return array_merge(parent::getMatchConditions(), [
+        return array_merge([
             'auth' => fn (Request $request): bool => $this->sessionAuth->getSessionId() === $request->getCookie(AdminConfig::SESSION_NAME_ADMIN)
         ]);
-    }
-
-    public function getUpdateUri(): string
-    {
-        return DIRECTORY_SEPARATOR . $this->frontNameResolver->getFrontName() . parent::getUpdateUri();
     }
 }

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd"
+>
+    <body>
+        <referenceContainer name="content">
+            <block name="dashboard.magewirephp"
+                   template="Magewirephp_MagewireCompatibilityWithLuma::dashboard/magewire.phtml"
+            >
+                <arguments>
+                    <argument name="magewire" xsi:type="object">
+                        Magewirephp\MagewireCompatibilityWithLuma\Magewire\Three\Backend
+                    </argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

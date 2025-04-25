@@ -2,6 +2,28 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd"
 >
+    <type name="Magewirephp\Magewire\Mechanisms">
+        <arguments>
+            <argument name="items">
+                <item name="resolve_components" xsi:type="array">
+                    <!--
+                        Overwrite: Resolver Mechanism View Model
+
+                        Normally, the "magewire" block is loaded at the body of the page where Magewire already ran
+                        several Magewire blocks which are then registered. But, for the backend this is a different
+                        story where the "magewire" block will most likely be loaded before requirejs to avoid
+                        a ton of issues and error messages in the console.
+
+                        For now, this should just return true to make everything being loaded.
+                    -->
+                    <item name="view_model" xsi:type="object">
+                        Magewirephp\MagewireAdmin\Magewire\Mechanisms\ResolveComponents
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+
     <type name="Magento\Framework\App\RouterList">
         <arguments>
             <argument name="routerList" xsi:type="array">
@@ -28,7 +50,9 @@
     <!-- Proxies -->
     <type name="Magewirephp\MagewireAdmin\Controller\MagewireUpdateRouteAdminhtml">
         <arguments>
-            <argument name="sessionAuth" xsi:type="object">Magento\Backend\Model\Auth\Session\Proxy</argument>
+            <argument name="sessionAuth" xsi:type="object">
+                Magento\Backend\Model\Auth\Session\Proxy
+            </argument>
         </arguments>
     </type>
 </config>
