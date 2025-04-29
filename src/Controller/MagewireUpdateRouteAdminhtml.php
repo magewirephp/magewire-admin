@@ -16,6 +16,7 @@ use Magento\Framework\App\ActionFactory;
 use Magento\Framework\HTTP\PhpEnvironment\Request;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Webapi\ServiceInputProcessor;
+use Magewirephp\Magento\App\Router\MagewireRouteValidator;
 use Magewirephp\Magewire\Controller\MagewireUpdateRouteFrontend;
 use Magewirephp\Magewire\MagewireServiceProvider;
 use Psr\Log\LoggerInterface;
@@ -28,14 +29,16 @@ class MagewireUpdateRouteAdminhtml extends MagewireUpdateRouteFrontend
         MagewireServiceProvider $magewireServiceProvider,
         ActionFactory $actionFactory,
         LoggerInterface $logger,
-        private readonly SessionAuth $sessionAuth
+        private readonly SessionAuth $sessionAuth,
+        private readonly MagewireRouteValidator $magewireRouteValidator
     ) {
         parent::__construct(
             $serializer,
             $serviceInputProcessor,
             $magewireServiceProvider,
             $actionFactory,
-            $logger
+            $logger,
+            $this->magewireRouteValidator
         );
     }
 

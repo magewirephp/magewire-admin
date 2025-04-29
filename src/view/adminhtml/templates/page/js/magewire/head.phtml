@@ -1,0 +1,11 @@
+<?php
+
+/** @var Template $block */
+
+use Magento\Framework\View\Element\Template;
+
+$block = $block->getChildBlock('script');
+
+if ($block) {
+    echo $block->toHtml();
+}

@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd"
+>
+    <body>
+        <!-- Include Magewire. -->
+        <move element="magewire" destination="root"/>
+        <!-- Move the Magewire library script into the head, before requirejs is being loaded. -->
+        <move element="magewire.script" destination="magewire.head"/>
+
+        <!-- Defines a custom head block that is rendered before RequireJS is injected into the head section of the page. -->
+        <block name="magewire.head"
+               template="Magewirephp_MagewireAdmin::page/js/magewire/head.phtml"
+        />
+
+        <!-- Injecting a Magento backend specific way of loading the Magewire JS-lib. -->
+        <referenceBlock name="magewire.script" template="Magewirephp_MagewireAdmin::page/js/magewire/head/script.phtml"/>
+    </body>
+</page>

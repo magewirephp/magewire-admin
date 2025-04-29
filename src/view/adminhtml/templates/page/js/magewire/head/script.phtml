@@ -1,0 +1,19 @@
+<?php
+
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+use Magewirephp\Magewire\ViewModel\Magewire as ViewModel;
+
+/** @var Escaper $escaper */
+/** @var Template $block */
+/** @var ViewModel $magewireViewModel */
+
+$magewireViewModel = $block->getData('view_model');
+?>
+<script
+    src="<?= $escaper->escapeUrl($magewireViewModel->utils()->magewire()->mechanisms()->frontendAssets()->getScriptPath()) ?>"
+    data-update-uri="/backend<?= $escaper->escapeHtmlAttr($magewireViewModel->utils()->magewire()->getUpdateUri()) ?>"
+    data-csrf="<?= $escaper->escapeHtmlAttr($magewireViewModel->utils()->security()->getCsrfToken()) ?>"
+></script>

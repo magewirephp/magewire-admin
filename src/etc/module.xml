@@ -4,6 +4,7 @@
 >
     <module name="Magewirephp_MagewireAdmin">
         <sequence>
+            <module name="Magento_Backend"/>
             <module name="Magewirephp_Magewire"/>
         </sequence>
     </module>
