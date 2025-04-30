@@ -13,6 +13,20 @@
                template="Magewirephp_MagewireAdmin::page/js/magewire/head.phtml"
         />
 
+        <referenceContainer name="content">
+            <!-- WIP: makes Magewire load dynamically because it sees a block... needs to change. -->
+            <block name="dashboard.magewirephp"
+                   template="Magewirephp_MagewireAdmin::dashboard/magewire.phtml"
+                   before="-"
+            >
+                <arguments>
+                    <argument name="magewire" xsi:type="object">
+                        Magewirephp\MagewireAdmin\Magewire\Three\Backend
+                    </argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+
         <!-- Injecting a Magento backend specific way of loading the Magewire JS-lib. -->
         <referenceBlock name="magewire.script" template="Magewirephp_MagewireAdmin::page/js/magewire/head/script.phtml"/>
     </body>

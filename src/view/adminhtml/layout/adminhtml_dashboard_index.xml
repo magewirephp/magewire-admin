@@ -3,18 +3,6 @@
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd"
 >
     <body>
-        <referenceContainer name="content">
-            <!-- WIP: makes Magewire load dynamically because it sees a block... needs to change. -->
-            <block name="dashboard.magewirephp"
-                   template="Magewirephp_MagewireAdmin::dashboard/magewire.phtml"
-                   before="-"
-            >
-                <arguments>
-                    <argument name="magewire" xsi:type="object">
-                        Magewirephp\MagewireAdmin\Magewire\Three\Backend
-                    </argument>
-                </arguments>
-            </block>
-        </referenceContainer>
+
     </body>
 </page>

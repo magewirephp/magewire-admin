@@ -36,6 +36,29 @@
         </arguments>
     </type>
 
+    <!-- Mechanism: Component Resolving -->
+    <type name="Magewirephp\Magewire\Mechanisms\ResolveComponents\ComponentResolverManagement">
+        <arguments>
+            <argument name="resolvers" xsi:type="array">
+
+                <!-- Registering a custom admin layout resolver to run just before the core "layout" resolver. -->
+                <item name="layout_admin" xsi:type="object" sortOrder="99800">
+                    Magewirephp\MagewireAdmin\Magewire\Mechanisms\ResolveComponents\ComponentResolver\LayoutAdminResolver
+                </item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magewirephp\MagewireAdmin\Magewire\Mechanisms\ResolveComponents\ComponentResolver\LayoutAdminResolver">
+        <arguments>
+            <argument name="handlesToExclude" xsi:type="array">
+
+                <!-- Although the parent layout resolver excludes "default", it should still be included within the admin context. -->
+                <item name="default" xsi:type="boolean">false</item>
+            </argument>
+        </arguments>
+    </type>
+
     <!-- Magewire Update Route: Adminhtml -->
     <type name="Magewirephp\Magewire\Controller\Router">
         <arguments>

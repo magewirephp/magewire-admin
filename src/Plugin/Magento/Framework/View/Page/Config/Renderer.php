@@ -26,8 +26,6 @@ class Renderer
         $head = $this->layout->getBlock('magewire.head');
 
         if ($head) {
-            $html = $head->toHtml();
-
             return preg_replace('/(<script\b[^>]*>)/i', $head->toHtml() . '$1', $result, 1);
         }
 

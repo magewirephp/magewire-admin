@@ -14,6 +14,13 @@ class ResolveComponentsViewModel extends \Magewirephp\Magewire\Mechanisms\Resolv
 {
     public function doesPageHaveComponents(): bool
     {
+        /*
+         * Temporary workaround to trick Magewire into believing there's always a component on the page.
+         * This forces it to initialize all Containers, Mechanisms, and Features.
+         *
+         * Unlike themes like Hyvä, Magewire's JS is loaded in the <head> and at the top of the body.
+         * This may change in the future, but it works for now.
+         */
         return true;
     }
 }
