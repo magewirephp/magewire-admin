@@ -15,6 +15,6 @@ $magewireViewModel = $block->getData('view_model');
 <script
     type="application/javascript"
     src="<?= $escaper->escapeUrl($magewireViewModel->utils()->magewire()->mechanisms()->frontendAssets()->getScriptPath()) ?>"
-    data-update-uri="/backend<?= $escaper->escapeHtmlAttr($magewireViewModel->utils()->magewire()->getUpdateUri()) ?>"
+    data-update-uri="<?= $escaper->escapeHtmlAttr($magewireViewModel->utils()->magewire()->getUpdateUri()) ?>"
     data-csrf="<?= $escaper->escapeHtmlAttr($magewireViewModel->utils()->security()->getCsrfToken()) ?>"
 ></script>

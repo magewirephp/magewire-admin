@@ -26,6 +26,8 @@ class Backend extends Component
 
     public function clear(): void
     {
+        $this->dispatchSuccessMessage('Test');
+
         $this->message = '';
     }
 }

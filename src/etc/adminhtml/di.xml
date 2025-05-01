@@ -59,6 +59,14 @@
         </arguments>
     </type>
 
+    <type name="Magewirephp\Magewire\Model\View\Utils">
+        <arguments>
+            <argument name="magewire" xsi:type="object">
+                Magewirephp\MagewireAdmin\Model\View\Utils\Magewire
+            </argument>
+        </arguments>
+    </type>
+
     <!-- Magewire Update Route: Adminhtml -->
     <type name="Magewirephp\Magewire\Controller\Router">
         <arguments>
