@@ -10,7 +10,7 @@
 
         <!-- Defines a custom head block that is rendered before RequireJS is injected into the head section of the page. -->
         <block name="magewire.head"
-               template="Magewirephp_MagewireAdmin::page/js/magewire/head.phtml"
+               template="Magewirephp_MagewireAdmin::js/magewire/head.phtml"
         />
 
         <referenceContainer name="content">
@@ -28,6 +28,12 @@
         </referenceContainer>
 
         <!-- Injecting a Magento backend specific way of loading the Magewire JS-lib. -->
-        <referenceBlock name="magewire.script" template="Magewirephp_MagewireAdmin::page/js/magewire/head/script.phtml"/>
+        <referenceBlock name="magewire.script" template="Magewirephp_MagewireAdmin::js/magewire/head/script.phtml">
+            <arguments>
+                <argument name="view_model" xsi:type="object">
+                    Magewirephp\Magewire\ViewModel\Magewire
+                </argument>
+            </arguments>
+        </referenceBlock>
     </body>
 </page>
