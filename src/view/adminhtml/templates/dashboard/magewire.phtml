@@ -1,0 +1,23 @@
+<?php
+
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+
+?>
+
+<div style="margin-bottom: 20px">
+    <button class="action-primary" wire:click="click">
+        What does Magewire V3 comes with?
+    </button>
+
+    <div style="block">
+        <?php if (! empty($magewire->message)): ?>
+            <span style="font-weight: bold">Server says:</span> <?= $magewire->message ?>
+
+            <button wire:click="clear" class="action">
+                Clear Message
+            </button>
+        <?php endif ?>
+    </div>
+</div>

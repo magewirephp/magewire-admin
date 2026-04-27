@@ -1,0 +1,33 @@
+{
+    "name": "magewirephp/magewire-admin",
+    "description": "A compatibility module enabling Magewire integration within the backend of Magento 2",
+    "type": "magento2-module",
+    "keywords": ["magento", "magento2", "magewire", "livewire", "reactive", "adminhtml", "backend"],
+    "homepage": "https://magewirephp.github.io/magewire-docs/",
+    "license": "MIT",
+    "require": {
+        "php": ">=8.2",
+        "magento/framework": "*",
+        "magento/module-backend": "*",
+        "magewirephp/magewire": "^3.0"
+    },
+    "support": {
+        "issues": "https://github.com/magewirephp/magewire-admin/discussions",
+        "source": "https://github.com/magewirephp/magewire-admin",
+        "docs": "https://magewirephp.github.io/magewire-docs/"
+    },
+    "authors": [
+        {
+            "name": "Willem Poortman",
+            "role": "Founder / Developer"
+        }
+    ],
+    "autoload": {
+        "files": [
+            "src/registration.php"
+        ],
+        "psr-4": {
+            "Magewirephp\\MagewireAdmin\\": "src/"
+        }
+    }
+}

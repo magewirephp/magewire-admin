@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd"
+>
+    <body>
+        <!-- Include Magewire. -->
+        <move element="magewire" destination="root"/>
+
+        <!-- Defines a custom head block that is rendered before RequireJS is injected into the head section of the page. -->
+        <block name="magewire.head"
+               template="Magewirephp_MagewireAdmin::js/magewire/head.phtml"
+        >
+            <!-- Injecting a Magento backend specific way of loading the Magewire JS-lib. -->
+            <block name="magewire.script"
+                   as="script"
+                   template="Magewirephp_MagewireAdmin::js/magewire/head/script.phtml"
+            >
+                <arguments>
+                    <argument name="view_model" xsi:type="object">
+                        Magewirephp\Magewire\ViewModel\Magewire
+                    </argument>
+                </arguments>
+            </block>
+        </block>
+
+        <!-- Custom implementation for rate limiting messaging within the backend. -->
+        <referenceBlock name="magewire.features.support-magewire-rate-limiting"
+                        template="Magewirephp_MagewireAdmin::magewire-features/support-magewire-rate-limiting/support-magewire-rate-limiting.phtml"
+        />
+    </body>
+</page>

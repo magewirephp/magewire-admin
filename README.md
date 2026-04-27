@@ -1,0 +1,48 @@
+# Magewire Admin
+
+[![Latest Stable Version](http://poser.pugx.org/magewirephp/magewire-admin/v)](https://packagist.org/packages/magewirephp/magewire-admin)
+[![Total Downloads](http://poser.pugx.org/magewirephp/magewire-admin/downloads)](https://packagist.org/packages/magewirephp/magewire-admin)
+[![License](http://poser.pugx.org/magewirephp/magewire-admin/license)](https://packagist.org/packages/magewirephp/magewire-admin)
+
+Adminhtml compatibility module for [Magewire](https://github.com/magewirephp/magewire). Enables reactive Magewire components inside the Magento 2 backend (admin panel) with the same server-driven, JavaScript-light developer experience Magewire provides on the storefront.
+
+## Requirements
+
+- PHP 8.2+
+- Magento 2.x
+- `magewirephp/magewire` ^3.0
+
+## Installation
+
+```bash
+composer require magewirephp/magewire-admin
+bin/magento setup:upgrade
+bin/magento setup:di:compile
+bin/magento cache:flush
+```
+
+The module sequences after `Magento_Backend` and `Magewirephp_Magewire`, so load order is handled automatically.
+
+## Documentation
+
+See the main Magewire [documentation](https://magewirephp.github.io/magewire-docs/) — component API, lifecycle hooks, and `wire:*` directives are identical between storefront and adminhtml.
+
+[![Discord](https://dcbadge.vercel.app/api/server/RM5nnK5wxj)](https://discord.gg/zS7z7rmH)
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Code of Conduct
+
+Review and abide by the [Code of Conduct](https://github.com/magewirephp/magewire/blob/main/CODE_OF_CONDUCT.md).
+
+## Security Vulnerabilities
+
+**Please do not report security issues publicly.** Email `magewirephp@wpoortman.nl` privately — see [SECURITY.md](SECURITY.md).
+
+## License
+
+Copyright © [Willem Poortman](https://github.com/wpoortman)
+
+Magewire Admin is open-sourced software licensed under the [MIT license](LICENSE.md).
