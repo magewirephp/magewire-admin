@@ -4,6 +4,7 @@
 >
     <router id="admin">
         <route id="magewire" frontName="magewire">
+            <module name="Magewirephp_MagewireAdmin" before="Magewirephp_Magewire"/>
             <module name="Magewirephp_Magewire" before="Magento_Backend"/>
         </route>
     </router>

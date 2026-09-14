@@ -23,6 +23,10 @@ bin/magento cache:flush
 
 The module sequences after `Magento_Backend` and `Magewirephp_Magewire`, so load order is handled automatically.
 
+## Browser-test route
+
+In default and developer modes, Magewire Admin exposes an authenticated `magewire/playwright` admin route. Admin integration modules can contribute fixtures through the `magewire_playwright_index` layout handle. The route has a stable, secret-key-free URL for browser automation, while Magento's admin authentication and ACL checks remain enforced. It resolves as a no-route response in production mode.
+
 ## Documentation
 
 See the main Magewire [documentation](https://magewirephp.github.io/magewire-docs/) — component API, lifecycle hooks, and `wire:*` directives are identical between storefront and adminhtml.
