@@ -1,0 +1,48 @@
+<?php
+
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+use Magewirephp\Magewire\Exceptions\RequestFilterException;
+use Magewirephp\Magewire\ViewModel\Magewire as MagewireViewModel;
+
+/** @var Escaper $escaper */
+/** @var Template $block */
+/** @var MagewireViewModel $magewireViewModel */
+
+$magewireViewModel = $block->getData('view_model');
+$magewireFragment = $magewireViewModel->utils()->fragment();
+
+/** @internal Do not modify to ensure Magewire continues to function correctly. */
+?>
+<?php $script = $magewireFragment->make()->script()->start() ?>
+<script>
+    document.addEventListener('magewire:init', () => {
+        const header = '<?= $escaper->escapeJs(RequestFilterException::MESSAGE_SEVERITY_HEADER) ?>';
+
+        Magewire.hook('request', ({ respond, fail }) => {
+            let severity = null;
+
+            respond(({ response }) => {
+                severity = response.headers.get(header);
+            });
+
+            fail(({ content, preventDefault }) => {
+                if (! severity) {
+                    return;
+                }
+
+                const message = (content || '').trim();
+
+                if (message === '') {
+                    return;
+                }
+
+                alert(message);
+                preventDefault();
+            });
+        });
+    });
+</script>
+<?php $script->end() ?>
