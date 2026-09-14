@@ -9,7 +9,7 @@
         "php": ">=8.2",
         "magento/framework": "*",
         "magento/module-backend": "*",
-        "magewirephp/magewire": "^3.0"
+        "magewirephp/magewire": "^3.7"
     },
     "support": {
         "issues": "https://github.com/magewirephp/magewire-admin/discussions",
