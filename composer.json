@@ -2,7 +2,15 @@
     "name": "magewirephp/magewire-admin",
     "description": "A compatibility module enabling Magewire integration within the backend of Magento 2",
     "type": "magento2-module",
-    "keywords": ["magento", "magento2", "magewire", "livewire", "reactive", "adminhtml", "backend"],
+    "keywords": [
+        "magento",
+        "magento2",
+        "magewire",
+        "livewire",
+        "reactive",
+        "adminhtml",
+        "backend"
+    ],
     "homepage": "https://magewirephp.github.io/magewire-docs/",
     "license": "MIT",
     "require": {
