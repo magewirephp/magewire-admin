@@ -1,0 +1,191 @@
+name: 'Backend tests'
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+  workflow_call:
+    inputs:
+      magewire_ref:
+        description: 'Exact Magewire commit to test; defaults to main.'
+        required: false
+        type: string
+        default: ''
+
+permissions:
+  contents: read
+
+concurrency:
+  group: backend-tests-${{ github.repository }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  playwright:
+    name: 'Admin Playwright / Mage-OS 3.1 / PHP 8.4'
+    runs-on: ubuntu-latest
+    env:
+      MAGENTO_DIR: ${{ github.workspace }}/magento
+      ADMIN_DIR: ${{ github.workspace }}/magewire-admin-src
+      MAGEWIRE_DIR: ${{ github.workspace }}/magewire-src
+      BASE_URL: 'http://127.0.0.1:8080/'
+      COMPOSER_MEMORY_LIMIT: '-1'
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: magento
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=15
+
+      opensearch:
+        image: opensearchproject/opensearch:2.12.0
+        env:
+          discovery.type: single-node
+          plugins.security.disabled: 'true'
+          bootstrap.memory_lock: 'true'
+          OPENSEARCH_JAVA_OPTS: '-Xms512m -Xmx512m'
+          OPENSEARCH_INITIAL_ADMIN_PASSWORD: 'Magewire-CI-123!'
+        ports:
+          - 9200:9200
+
+    steps:
+      - name: Checkout Magewire Admin
+        uses: actions/checkout@v7
+        with:
+          repository: magewirephp/magewire-admin
+          ref: ${{ github.repository == 'magewirephp/magewire-admin' && github.sha || 'main' }}
+          path: magewire-admin-src
+          persist-credentials: false
+
+      - name: Checkout Magewire
+        uses: actions/checkout@v7
+        with:
+          repository: magewirephp/magewire
+          ref: ${{ inputs.magewire_ref || 'main' }}
+          path: magewire-src
+          persist-credentials: false
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: bcmath, ctype, curl, dom, gd, hash, iconv, intl, mbstring, openssl, pdo_mysql, simplexml, soap, sockets, xsl, zip, fileinfo
+          tools: composer:v2
+          ini-values: memory_limit=-1
+        env:
+          COMPOSER_TOKEN: ${{ github.token }}
+
+      - name: Wait for OpenSearch
+        run: |
+          for i in $(seq 1 30); do
+            if curl -fs http://127.0.0.1:9200/_cluster/health >/dev/null; then
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "::error::OpenSearch did not become ready."
+          exit 1
+
+      - name: Create Mage-OS project
+        run: |
+          composer create-project \
+            --repository-url=https://repo.mage-os.org/ \
+            --no-install \
+            mage-os/project-community-edition:3.1.0 \
+            "$MAGENTO_DIR"
+
+      - name: Install Magewire and Magewire Admin
+        working-directory: ${{ env.MAGENTO_DIR }}
+        run: |
+          composer config minimum-stability dev
+          composer config prefer-stable true
+          composer config allow-plugins.mage-os/composer-dependency-version-audit-plugin false
+          composer config allow-plugins.magento/composer-dependency-version-audit-plugin false
+          composer config repositories.magewire-src \
+            "{\"type\":\"path\",\"url\":\"$MAGEWIRE_DIR\",\"options\":{\"symlink\":false}}"
+          composer config repositories.magewire-admin-src \
+            "{\"type\":\"path\",\"url\":\"$ADMIN_DIR\",\"options\":{\"symlink\":false}}"
+          composer --working-dir="$MAGEWIRE_DIR" config version 3.999.0
+          composer --working-dir="$ADMIN_DIR" config version 3.999.0
+          composer install --no-dev --no-interaction --no-progress
+          composer require --no-update --no-interaction \
+            magewirephp/magewire:3.999.0 \
+            magewirephp/magewire-admin:3.999.0
+          composer update --no-dev --no-interaction --no-progress -W
+
+      - name: Install Mage-OS
+        working-directory: ${{ env.MAGENTO_DIR }}
+        run: |
+          php bin/magento setup:install \
+            --base-url="$BASE_URL" \
+            --db-host=127.0.0.1 --db-name=magento --db-user=root --db-password=root \
+            --search-engine=opensearch \
+            --opensearch-host=127.0.0.1 --opensearch-port=9200 \
+            --admin-firstname=Admin --admin-lastname=User \
+            --admin-email=admin@example.com \
+            --admin-user=admin --admin-password=Admin123! \
+            --language=en_US --currency=USD --timezone=America/New_York \
+            --use-rewrites=1 --backend-frontname=admin \
+            --no-interaction
+          php bin/magento deploy:mode:set developer
+          php bin/magento module:disable Magento_TwoFactorAuth
+          php bin/magento setup:upgrade --no-interaction
+          php bin/magento cache:flush
+
+      - name: Start Magento
+        working-directory: ${{ env.MAGENTO_DIR }}
+        run: |
+          PHP_CLI_SERVER_WORKERS=8 php -S 127.0.0.1:8080 -t pub phpserver/router.php \
+            > "$GITHUB_WORKSPACE/phpserver.log" 2>&1 &
+
+      - name: Wait for admin login
+        run: |
+          for i in $(seq 1 30); do
+            code=$(curl -L -s -o /dev/null -w '%{http_code}' "$BASE_URL/admin/magewire/playwright/ui" || true)
+            if [ "$code" = "200" ]; then
+              exit 0
+            fi
+            echo "Waiting for admin login, got HTTP $code ($i)..."
+            sleep 5
+          done
+          cat "$GITHUB_WORKSPACE/phpserver.log"
+          exit 1
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+
+      - name: Install Playwright and Chromium
+        working-directory: ${{ env.ADMIN_DIR }}/tests/Playwright
+        run: |
+          npm install --no-audit --no-fund
+          npx playwright install --with-deps chromium
+
+      - name: Run backend browser tests
+        working-directory: ${{ env.ADMIN_DIR }}/tests/Playwright
+        env:
+          ADMIN_PATH: admin
+          ADMIN_USER: admin
+          ADMIN_PASSWORD: Admin123!
+        run: npx playwright test
+
+      - name: Upload failure details
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: magewire-admin-playwright-results
+          path: |
+            ${{ env.ADMIN_DIR }}/tests/Playwright/test-results
+            ${{ github.workspace }}/phpserver.log
+          retention-days: 7
+          if-no-files-found: ignore
