@@ -27,6 +27,21 @@ The module sequences after `Magento_Backend` and `Magewirephp_Magewire`, so load
 
 In default and developer modes, Magewire Admin exposes an authenticated `magewire/playwright` admin route. Admin integration modules can contribute fixtures through the `magewire_playwright_index` layout handle. The route has a stable, secret-key-free URL for browser automation, while Magento's admin authentication and ACL checks remain enforced. It resolves as a no-route response in production mode.
 
+## Backend tests
+
+The [backend test workflow](.github/workflows/backend-tests.yml) runs the Playwright suite after every push to `main` and on pull requests. It installs Mage-OS with Magewire and Magewire Admin from source, then checks that the admin workbench requires a login and can complete a Magewire update. Magewire's own `main` pipeline calls the same workflow with its merged commit.
+
+To run the suite against a local developer-mode Magento installation:
+
+```bash
+cd tests/Playwright
+npm install
+npx playwright install chromium
+BASE_URL=https://magento.test/ ADMIN_PATH=backend ADMIN_USER=admin ADMIN_PASSWORD=... npm test
+```
+
+Set `ADMIN_PATH` to the installation's backend front name. The admin user must be able to log in without an interactive two-factor challenge.
+
 ## Documentation
 
 See the main Magewire [documentation](https://magewirephp.github.io/magewire-docs/) — component API, lifecycle hooks, and `wire:*` directives are identical between storefront and adminhtml.
