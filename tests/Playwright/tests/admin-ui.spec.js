@@ -15,6 +15,7 @@ test('admin workbench requires an authenticated session', async ({ page }) => {
     await page.goto(workbenchUrl, { waitUntil: 'domcontentloaded' });
 
     await expect(page.locator('#login-form')).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Sign in' })).toBeVisible();
     await expect(page.getByTestId('ui-workbench')).toHaveCount(0);
 });
 
@@ -22,7 +23,7 @@ test('admin workbench renders and handles a Magewire update', async ({ page }) =
     await page.goto(workbenchUrl, { waitUntil: 'domcontentloaded' });
     await page.locator('#username').fill(process.env.ADMIN_USER);
     await page.locator('#login').fill(process.env.ADMIN_PASSWORD);
-    await page.locator('#login-form button[type="submit"]').click();
+    await page.getByRole('button', { name: 'Sign in' }).click();
 
     await page.goto(workbenchUrl, { waitUntil: 'domcontentloaded' });
     const workbench = page.getByTestId('ui-workbench');
