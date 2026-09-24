@@ -16,6 +16,8 @@ use Magewirephp\Magewire\Mechanisms\ResolveComponents\ComponentResolver\LayoutRe
 
 class LayoutAdminResolver extends LayoutResolver
 {
+    protected string $accessor = 'layout_admin';
+
     protected function determineLayoutHandles(Component $component, ComponentContext $context): array
     {
         $handles = parent::determineLayoutHandles($component, $context);
