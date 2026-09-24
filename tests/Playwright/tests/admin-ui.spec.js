@@ -3,6 +3,14 @@ import { test, expect } from '@playwright/test';
 const adminPath = process.env.ADMIN_PATH || 'admin';
 const workbenchUrl = `/${adminPath}/magewire/playwright/ui`;
 
+test.beforeEach(async ({ page }) => {
+    // Magento developer mode compiles backend LESS on demand. These checks exercise
+    // authentication and Magewire behavior, so avoid the expensive stylesheet request.
+    await page.route('**/*', route =>
+        route.request().resourceType() === 'stylesheet' ? route.abort() : route.continue()
+    );
+});
+
 test('admin workbench requires an authenticated session', async ({ page }) => {
     await page.goto(workbenchUrl, { waitUntil: 'domcontentloaded' });
 

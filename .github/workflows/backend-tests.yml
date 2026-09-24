@@ -141,10 +141,6 @@ jobs:
           php bin/magento setup:upgrade --no-interaction
           php bin/magento cache:flush
 
-      - name: Build admin static assets
-        working-directory: ${{ env.MAGENTO_DIR }}
-        run: php bin/magento setup:static-content:deploy -f --area adminhtml --theme Magento/backend en_US
-
       - name: Start Magento
         working-directory: ${{ env.MAGENTO_DIR }}
         run: |
