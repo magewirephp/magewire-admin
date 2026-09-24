@@ -1,0 +1,115 @@
+/* Admin presentation for Magewire's shared UI components. Theme-specific
+   backends can adjust the namespaced custom properties without changing markup. */
+
+.magewire-notifier {
+    --magewire-notifier-gap: 10px;
+    --magewire-notifier-offset: 20px;
+    --magewire-notifier-width: 380px;
+    --magewire-notifier-surface: #fff;
+    --magewire-notifier-border: #d9dee6;
+    --magewire-notifier-color: #243041;
+    --magewire-notifier-muted-color: #596779;
+    --magewire-notifier-radius: 10px;
+    --magewire-notifier-shadow: 0 12px 32px rgb(25 38 55 / 14%), 0 2px 6px rgb(25 38 55 / 6%);
+    --magewire-notifier-padding-block: 14px;
+    --magewire-notifier-padding-inline: 16px;
+
+    font-size: 14px;
+}
+
+.magewire-notifier .magewire-notifier-item.message[data-type] {
+    align-items: flex-start;
+    gap: 12px;
+    border-inline-start: 1px solid var(--magewire-notifier-border);
+    font-size: 14px;
+    line-height: 1.45;
+    text-shadow: none;
+}
+
+/* Magento's generic .message icon uses its own font and positioning. */
+.magewire-notifier .magewire-notifier-item.message[data-type]::before {
+    position: static;
+    display: block;
+    flex: 0 0 8px;
+    inline-size: 8px;
+    block-size: 8px;
+    margin: 6px 0 0;
+    border: 0;
+    border-radius: 50%;
+    background: var(--magewire-notifier-accent);
+    box-shadow: 0 0 0 4px var(--magewire-notifier-accent-surface);
+    content: "";
+}
+
+.magewire-notifier .magewire-notifier-title {
+    font-size: 14px;
+    line-height: 1.35;
+}
+
+.magewire-notifier .magewire-notifier-message {
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.magewire-notifier .magewire-notifier-title + .magewire-notifier-message {
+    margin-block-start: 3px;
+}
+
+.magewire-notifier .magewire-notifier-occurrences {
+    min-inline-size: 24px;
+    block-size: 24px;
+    padding-inline: 5px;
+    border-radius: 12px;
+    font-size: 11px;
+}
+
+.magewire-notifier .magewire-notifier-close {
+    inline-size: 28px;
+    block-size: 28px;
+    margin: -5px -5px -5px 0;
+    border-radius: 6px;
+    color: var(--magewire-notifier-muted-color);
+}
+
+.magewire-notifier .magewire-notifier-close:hover {
+    background: var(--magewire-notifier-close-hover, #f0f3f7);
+    color: var(--magewire-notifier-color);
+}
+
+.magewire-notifier .magewire-notifier-close:focus-visible {
+    outline: 2px solid var(--magewire-notifier-accent);
+    outline-offset: 2px;
+}
+
+.magewire-notifier .magewire-notifier-close-icon {
+    inline-size: 16px;
+    block-size: 16px;
+}
+
+.magewire-component-loader {
+    border-radius: inherit;
+    background: var(--magewire-admin-loader-backdrop, rgb(255 255 255 / 78%));
+    backdrop-filter: blur(2px);
+}
+
+.magewire-component-loader-spinner {
+    display: grid;
+    place-items: center;
+    inline-size: 48px;
+    block-size: 48px;
+    box-sizing: border-box;
+    padding: 11px;
+    border: 1px solid var(--magewire-admin-loader-border, #d9dee6);
+    border-radius: 12px;
+    background: var(--magewire-admin-loader-surface, #fff);
+    box-shadow: var(--magewire-admin-loader-shadow, 0 8px 24px rgb(25 38 55 / 12%));
+    color: var(--magewire-admin-loader-color, #48586b);
+}
+
+@media (min-width: 768px) {
+    .magewire-notifier {
+        inset-inline-start: auto;
+        inset-inline-end: var(--magewire-notifier-offset);
+        margin-inline: 0;
+    }
+}
